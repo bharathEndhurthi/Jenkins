@@ -1,0 +1,56 @@
+Jenkins Master slave configuration:
+===================================
+why..?
+to reduce Job-Build load on the jenkin's(Master) server by creating nodes(Slaves) and attaching it to Master.
+
+Requirements:
+-------------
+	on Master Server: --> Java,Jenkins (mandatory) 
+	-----------------
+
+	on Slave Server: --> Java(mandatory)
+	----------------
+
+Configuration-Process:
+----------------------
+	
+Step.1 :
+-------- 
+		On SlaveServer: 	--> Login to Ec2 Server --> create a directory for LogFiles for Master Jenkis --> pwd --> check and copy this path
+		-----------------	
+
+
+
+
+Step.2 :
+-------- 
+		On Master Server: 	--> Jenkins --> Manage Jenkins --> Manage Nodes and clouds --> New Node.
+		-----------------	--> Node Name --> Permanent Agent(select checkbox) --> Description --> no.of executors
+					--> Remtore Directory(give created LogFile's path in Slave Machine) --> Label
+					--> Usage(As much as possible) --> Launch Method(Launch Agent via SSH)
+					--> Host(give your Slave Machine's Ip-public/pvt) --> credentials(add)
+					--> Kind(SSH username with private key) --> id(your wish) --> Description(your widh)
+					--> username(slave's username (example: ec2-user)) --> Private Key(enter directly)
+					--> Passphrase(enter if you allocate for your slave instance)
+					--> Add --> select created credentials --> Availability --> as much as possible
+					--> Save --> Launch/Launched --> DONE.
+
+Step.3 :
+-------- 
+		On Master Server	--> go to your Job(which you want to send Logs for Slave Machine --> configure --> under General -->
+		----------------	    Restrict where this project can be run(Select created node) --> Apply & Save --> DONE 
+		
+					
+
+How to check Result:
+--------------------
+		
+		On Master Server	--> Build that(allocated Job) --> Go to console output --> check the Log's Path.
+		----------------
+				
+		On Slave Server		--> Go to created Directory --> workspace --> check all files from the Log(after build done from the Master server)
+		---------------
+
+				
+
+
